@@ -39,7 +39,7 @@
         private bool CrackPassword(string password)
         {
             _mutex.WaitOne();
-            if (_passwordsToCrack.Count(p => p.Value == false) == 0)
+            if (_passwordsToCrack.All(p => p.Value == true))
             {
                 _mutex.ReleaseMutex();
                 return false;

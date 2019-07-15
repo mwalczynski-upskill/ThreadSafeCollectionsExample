@@ -38,7 +38,7 @@
                     _mutex.WaitOne();
                     _passwordsToCrack[hashedPass] = true;
 
-                    if (_passwordsToCrack.Count(p => p.Value == false) == 0)
+                    if (_passwordsToCrack.All(p => p.Value == true))
                     {
                         _mutex.ReleaseMutex();
                         ConsumptionFinished("All passwords cracked");
@@ -46,7 +46,7 @@
                     }
                     _mutex.ReleaseMutex();
                 }
-                else if (_passwordsToCrack.Count(p => p.Value == false) == 0)
+                else if (_passwordsToCrack.All(p => p.Value == true))
                 {
                     ConsumptionFinished("All passwords cracked");
                     return;
