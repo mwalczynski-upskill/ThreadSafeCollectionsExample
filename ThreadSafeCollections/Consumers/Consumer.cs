@@ -11,7 +11,6 @@
     {
         private readonly Dictionary<string, bool> _passwordsToCrack;
         private readonly SyncQueue<HashedPassword> _crackedPasswords;
-
         private readonly Mutex _mutex;
 
         public Consumer(Dictionary<string, bool> passwordsToCrack, SyncQueue<HashedPassword> crackedPasswords, Mutex mutex)
