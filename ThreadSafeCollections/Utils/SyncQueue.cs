@@ -10,31 +10,58 @@
 
         public void Enqueue(T item)
         {
-            lock (_sync)
+            try
             {
+                // Hold lock as queue is shared between multiple threads
+                Monitor.Enter(_sync);
+
                 _queue.Enqueue(item);
-                Monitor.PulseAll(_sync);
+
+                //Notify other threads that the job is done
+                Monitor.Pulse(_sync);
+            }
+            finally
+            {
+                // Release lock
+                Monitor.Exit(_sync);
             }
         }
 
         public T Dequeue()
         {
-            lock (_sync)
+            try
             {
+                // Hold lock as queue is shared between multiple threads
+                Monitor.Enter(_sync);
+
                 while (_queue.Count == 0)
                 {
+                    // Will wait here till other thread notify with Monitor.Pulse or Monitor.PulseAll
                     Monitor.Wait(_sync);
                 }
 
                 return _queue.Dequeue();
             }
+            finally
+            {
+                // Release lock
+                Monitor.Exit(_sync);
+            }
         }
 
         public int Count()
         {
-            lock (_sync)
+            try
             {
+                // Hold lock as queue is shared between multiple threads
+                Monitor.Enter(_sync);
+
                 return _queue.Count;
+            }
+            finally
+            {
+                // Release lock
+                Monitor.Exit(_sync);
             }
         }
     }
